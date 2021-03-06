@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Extensions.fs" />
+    <Compile Include="FileSystem.fs" />
+    <Compile Include="Serialization.fs" />
+    <Compile Include="RestApi.fs" />
+    <Compile Include="Notifications.fs" />
+    <Compile Include="Analyzer.fs" />
+    <Compile Include="FlakyConfig.fs" />
+    <Compile Include="FlakyMonitor.fs" />
+    <Compile Include="Issues.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Argu" Version="6.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
+  </ItemGroup>
+
+</Project>

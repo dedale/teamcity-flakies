@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <GenerateProgramFile>False</GenerateProgramFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Extensions\RestApi.fs" />
+    <Compile Include="Extensions\Notifications.fs" />
+    <Compile Include="Extensions\Issues.fs" />
+    <Compile Include="FileSystem.fs" />
+    <Compile Include="Xml.fs" />
+    <Compile Include="RestApi.fs" />
+    <Compile Include="Notifications.fs" />
+    <Compile Include="Analyzer.fs" />
+    <Compile Include="FlakyMonitor.fs" />
+    <Compile Include="Issues.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Expecto" Version="9.0.2" />
+    <PackageReference Include="Expecto.VisualStudio.TestAdapter" Version="10.0.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\TeamCity\Flakies\TeamCity.Flakies.fsproj" />
+  </ItemGroup>
+
+</Project>

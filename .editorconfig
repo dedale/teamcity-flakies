@@ -1,0 +1,3 @@
+[*.fs]
+fsharp_max_dot_get_expression_width=120
+fsharp_max_value_binding_width=120
