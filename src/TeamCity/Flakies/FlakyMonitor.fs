@@ -33,14 +33,7 @@ module FlakyMonitor =
 
         List.fold foldTests Map.empty prefixed
 
-    let getFlakyTests
-        testDetails
-        testHistory
-        tryGuessFlakiness
-        (log: string -> unit)
-        build
-        (failedTests: seq<FailedTest>)
-        =
+    let getFlakyTests testDetails testHistory tryGuessFlakiness log build (failedTests: seq<FailedTest>) =
         let mapping (failed: FailedTest) =
             match testDetails failed.Id with
             | Some details ->
@@ -61,7 +54,7 @@ module FlakyMonitor =
         |> Seq.choose id
         |> List.ofSeq
 
-    let analyzeTests analyzeTest analyzeGroup (groups: Map<string, FlakyGroup>) (build: FailedBuild) state : State =
+    let analyzeTests analyzeTest analyzeGroup (groups: Map<string, FlakyGroup>) build state =
         groups
         |> Map.fold
             (fun state _ group ->
@@ -76,7 +69,7 @@ module FlakyMonitor =
         getFlakyTests
         analyzeTests
         analyzeBuild
-        (log: string -> unit)
+        log
         (projectId: ProjectId)
         stateFile
         =

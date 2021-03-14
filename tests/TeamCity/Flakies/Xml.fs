@@ -9,10 +9,10 @@ type XmlContainer =
     | Attribute of string * obj
     | XmlValue of string
 
-    static member Element(name: string, [<ParamArray>] children: XmlContainer []) : XmlContainer =
+    static member Element(name, [<ParamArray>] children) : XmlContainer =
         XmlElement(name, children |> List.ofArray)
 
-    static member Element(name: string, value: string) : XmlContainer = XmlElement(name, [ XmlValue value ])
+    static member Element(name, value) : XmlContainer = XmlElement(name, [ XmlValue value ])
 
     override x.ToString() =
         let rec fromContainer container : obj =

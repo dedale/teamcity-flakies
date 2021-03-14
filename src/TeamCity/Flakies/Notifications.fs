@@ -52,7 +52,7 @@ type NotificationId =
 and NotificationIdConverter() =
     inherit StringConverter<NotificationId>()
 
-    override __.FromString str : NotificationId =
+    override __.FromString str =
         if str.[0] = 'T' then
             let parts = str.Substring(1).Split('|')
             let testId = TestId(Int64.Parse parts.[0])
@@ -63,7 +63,7 @@ and NotificationIdConverter() =
         else // 'B'
             NotificationId.BuildTypeId(BuildTypeId(str.Substring(1)))
 
-    override __.ToString(value: NotificationId) : string =
+    override __.ToString value =
         match value with
         | NotificationId.Test (testId, testName) -> $"T{testId.Value}|{testName.Value}"
         | NotificationId.Prefix name -> $"P{name}"
@@ -198,13 +198,7 @@ type State private (builds: Set<BuildId>, histories: Map<NotificationId, Notific
     member __.Update(history: NotificationHistory) =
         State(builds, histories.Remove(history.Id).Add(history.Id, history))
 
-    member x.NewOccurrence
-        (create: CreateIssue)
-        (update: UpdateIssue)
-        (build: FailedBuild)
-        (notificationId: NotificationId)
-        (technical: TechnicalFlakiness)
-        =
+    member x.NewOccurrence (create: CreateIssue) update build notificationId technical =
         match x.TryHistory notificationId with
         | Some history ->
             let history = history.NewOccurrence(technical.Flakiness)

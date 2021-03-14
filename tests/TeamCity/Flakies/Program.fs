@@ -1,5 +1,4 @@
-﻿//module TeamCity.Flakies.Tests
-
+﻿
 open Expecto
 
 let all =

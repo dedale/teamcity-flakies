@@ -48,7 +48,7 @@ module FlakyTestAnalyzer =
               "The process cannot access the file.*because it is being used by another process",
               Flakiness.FileInUse.ToDefault() ]
 
-        let rec tryMatch (line: string) (patterns: (string * TechnicalFlakiness) list) =
+        let rec tryMatch line patterns =
             match patterns with
             | (pattern, flakiness) :: ps ->
                 if Regex.IsMatch(line, pattern) then
@@ -93,14 +93,7 @@ module FlakyTestAnalyzer =
         else
             None
 
-    let test
-        (create: CreateIssue)
-        (update: UpdateIssue)
-        (details: TestDetails)
-        (build: FailedBuild)
-        (technical: TechnicalFlakiness)
-        (state: State)
-        =
+    let test create update (details: TestDetails) build technical (state: State) =
         let notificationId =
             if technical.Flakiness = Flakiness.RandomTestName then
                 NotificationId.Prefix(uniqueName details.Name)
@@ -109,12 +102,12 @@ module FlakyTestAnalyzer =
 
         state.NewOccurrence create update build notificationId technical
 
-    let group (create: CreateIssue) (update: UpdateIssue) (group: FlakyGroup) (build: FailedBuild) (state: State) =
+    let group create update (group: FlakyGroup) build (state: State) =
         let notificationId = NotificationId.Prefix group.Prefix
         state.NewOccurrence create update build notificationId group.Technical
 
 module BuildAnalyzer =
-    let private guessFlakiness others (line: string) =
+    let private guessFlakiness others line =
         let patterns =
             [ "error MSB4166: Child node.*exited prematurely", Flakiness.MSBuildCrash.ToTechnical()
               "error MSB4018: The.*task failed unexpectedly", Flakiness.MSBuildCrash.ToTechnical()
@@ -127,7 +120,7 @@ module BuildAnalyzer =
               "There is not enough space on the disk", Flakiness.DiskFull.ToTechnical()
               "pip install failed", Flakiness.PipFailed.ToDefault() ]
 
-        let rec tryMatch (line: string) (patterns: (string * TechnicalFlakiness) list) =
+        let rec tryMatch line patterns =
             match patterns with
             | (pattern, flakiness) :: ps ->
                 if Regex.IsMatch(line, pattern) then
@@ -140,7 +133,7 @@ module BuildAnalyzer =
         | Some f -> Set.add f others
         | _ -> others
 
-    let run getProblems downloadLog (create: CreateIssue) (update: UpdateIssue) (build: FailedBuild) (state: State) =
+    let run getProblems downloadLog create update (build: FailedBuild) state =
         let problems = getProblems build.Id
         let isTimeout = Seq.exists (fun p -> p.Type.Value = "TC_EXECUTION_TIMEOUT") problems
 
