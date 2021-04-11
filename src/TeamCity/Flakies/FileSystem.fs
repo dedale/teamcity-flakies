@@ -113,7 +113,7 @@ and DirPath private (path) =
             if temp.Exists then
                 temp.DeleteIgnoringErrors()
 
-    member x.CreateUnique?name =
+    member __.CreateUnique ?name =
         match name with
         | Some name ->
             let mutable index = 0
